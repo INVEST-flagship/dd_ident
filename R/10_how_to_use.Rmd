@@ -1,0 +1,117 @@
+---
+title: "R-code to reproduce analyses"
+# author: "David Gyllenberg"
+output:
+  word_document: default
+    # toc: yes
+  pdf_document:
+    toc: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+This document shows how the R-functions for producing simulation data, preprocessing data, vizualing data and performing the analyses are utlized as described in the manuscript 'Data-Driven Identification of Risk Factors and Their Interactions – A Simulation and a Study of Parental and Demographic Risk Factors for Schizophrenia'.  
+
+## Load functions
+
+Clone the repository from <https://github.com/davgyl/select_interact.git> and load the functions from the R-scripts.  
+
+```{r chunk_01}
+source("01_load_pkgs.R")
+source("02_simdata.R")
+source("03_preprocess.R")
+source("04_plot_prev.R")
+source("05_plot_heatmap.R")
+source("06_glmnet.R")
+
+```
+
+\pagebreak  
+
+## Simulate data
+
+Use the `dd_sim`-function to produce simulation data.
+
+```{r chunk_02}
+# Apply function and set seed for reproducible example
+data <- dd_sim(seed = 1000)
+# Display data
+data
+```
+
+\pagebreak 
+
+## Plot the proportion of predictors
+
+Use the `dd_plot_prop`-function to the proportion of predictors by case-control status. Note that main effects `A1`, `B1` and `C1` are active at OR=1.3 and interaction `A2 x B2` is active at OR=3.  
+
+```{r chunk_03, fig.height=7}
+dd_plot_prop(data)
+```
+
+\pagebreak 
+
+## Plot the log(OR) between main effect variables  
+Note that the three groups of variables (A, B, C) are defined to have a within-group correlation in the simulated data.  
+```{r chunk_04}
+dd_heatmap(data, limit = c(-4, 4))
+```
+
+
+\pagebreak 
+
+
+## Preprocess data
+
+Use the `dd_preprocess`-function to preprocess data as described in the manuscript.  This will produce a list-object containing three dataframes:  
+- The frequnecies, prevalence (%) and expected count of predictors  
+- The correlational structure of the main effects  
+- The preprocessed data with included predictors (main and interaction effects)  
+
+```{r chunk_05}
+proc_data <- 
+  data %>% 
+  dd_preprocess()
+```
+
+
+Display the preprocessed data.  
+
+```{r chunk_08}
+proc_data$data
+```
+
+\pagebreak
+
+## Variable selection and assessment of associations  
+
+Use the `dd_select`-function to perform variable selection with the elastic net and assess the Bonferroni-corrected p-values and confidence intervals (CI) of the sparse model as described in the manuscript. 
+  
+In the simulation data, the main effects `A1`, `B1` and `C1` are defined as active at OR=1.3 and the interaction `A2 x B2` is defined active at OR=3.  
+
+```{r chunk_09}
+dd_select(proc_data$data)$bonf %>% 
+  kable
+```
+
+```{r chunk_10}
+
+# lapply(
+#   list(
+#     "tidyverse", 
+#     "simstudy",
+#     "stringr", 
+#     "cowplot",
+#     "glmnet", 
+#     "furrr", 
+#     "tictoc", 
+#     "openxlsx", 
+#     "knitr"), 
+#   citation)
+
+
+```
