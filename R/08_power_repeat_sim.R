@@ -135,7 +135,7 @@ for(i in 1:n_files) {
   write_rds(
     res_act_int,
     paste0(
-      "tables//res_sim_auc_n4500_alphadetect100_", i , "_",
+      "tables//res_sim_", i , "_",
       dd_timestamp(),
       ".rds")
   )
@@ -169,6 +169,7 @@ def_intercept <-
     scenario, 
     intercept)
 
+# Scope
 def_intercept <- 
   def_intercept %>% 
   filter(
@@ -243,7 +244,7 @@ for(i in 1:n_files) {
   write_rds(
     res_nonact_int,
     paste0(
-      "tables//res_nonact_sim_auc_n4500_", i , "_",
+      "tables//res_nonact_sim_", i , "_",
       dd_timestamp(),
       ".rds")
   )
