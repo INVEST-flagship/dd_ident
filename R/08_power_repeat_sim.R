@@ -36,7 +36,8 @@ def_intercept <- def_intercept[1, ]
 
 stopifnot(def_intercept %>% distinct(scenario) %>% nrow() == nrow(def_intercept))
 
-n_sim <- 100
+# Number of simulations; can be multiplied with n_files, see 'Return results'
+n_sim <- 100 
 
 arg_int <- 
   def_intercept %>% 
@@ -115,8 +116,10 @@ dd_sim_preprocess <- function(
 # Multiprocess
 plan(multiprocess(workers = availableCores()-1))
 
+# Check computational time
 tic()
 
+# Loop simulations over multiple files and write files to save central memory
 n_files <- 100 # n_files * n_sim = number of simulations
 
 for(i in 1:n_files) {
@@ -149,7 +152,9 @@ write_rds(
   paste0("tables//", list.files("tables", "res_sim_[0-9]")) %>%
     map_df(read_rds),
   paste0(
-    "tables//res_sim_",
+    "tables//res_sim_combine_",
+    n_sim*n_files, 
+    "_",
     dd_timestamp(),
     ".rds")
 )
@@ -226,7 +231,7 @@ plan(multiprocess(workers = availableCores()-1))
 
 tic()
 
-n_files <- 90
+n_files <- 100
 
 for(i in 1:n_files) {
   
@@ -256,7 +261,9 @@ write_rds(
   paste0("tables//", list.files("tables", "res_nonact_sim_[0-9]")) %>%
     map_df(read_rds),
   paste0(
-    "tables//res_nonact_sim_comb10K_",
+    "tables//res_nonact_sim_",
+    n_sim*n_files, 
+    "_",
     dd_timestamp(),
     ".rds")
 )
