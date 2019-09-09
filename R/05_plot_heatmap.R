@@ -18,6 +18,13 @@ dd_heatmap <-
     proc_data <- dt %>% dd_preprocess()
     proc_data <- proc_data$cor_table
     
+    levels(proc_data$Var1) <-
+      levels(proc_data$Var1) %>%
+      str_replace_all("_", " ")
+    levels(proc_data$Var2) <-
+      levels(proc_data$Var2) %>%
+      str_replace_all("_", " ")
+    
     proc_data %>% 
       mutate(
         Var1 = Var1 %>% str_replace_all("_", " "),
