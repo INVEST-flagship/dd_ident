@@ -1,6 +1,6 @@
 # Install pacman for easy loading of packages
 suppressMessages(
-  if(!require(pacman)) install.packages("pacman")
+  if(!require(pacman)) {install.packages("pacman");library(pacman)}
 )
 
 # Load packages
