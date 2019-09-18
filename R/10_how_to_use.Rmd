@@ -2,11 +2,11 @@
 title: "R-code to reproduce analyses"
 # author: "David Gyllenberg"
 output:
-  word_document: default
-    # toc: yes
+  html_document: default
   pdf_document:
     toc: yes
-  html_document: default
+  word_document: default
+    # toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -96,22 +96,4 @@ In the simulation data, the main effects `A1`, `B1` and `C1` are defined as acti
 ```{r chunk_09}
 dd_select(proc_data$data)$bonf %>% 
   kable
-```
-
-```{r chunk_10}
-
-# lapply(
-#   list(
-#     "tidyverse", 
-#     "simstudy",
-#     "stringr", 
-#     "cowplot",
-#     "glmnet", 
-#     "furrr", 
-#     "tictoc", 
-#     "openxlsx", 
-#     "knitr"), 
-#   citation)
-
-
 ```
