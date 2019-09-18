@@ -1,5 +1,4 @@
-# Code for Data-driven identification of risk factors and their interactions
-Please see 10_how_to_use.Rmd for example
+# R-code to reproduce analyses for Data-driven identification of risk factors and their interactions
 
 ## Introduction
 This document shows how the R-functions for producing simulation data, preprocessing data, vizualizing data and performing the analyses are utilized as described in the manuscript 'Data-Driven Identification of Risk Factors and Their Interactions - A Simulation and a Study of Parental and Demographic Risk Factors for Schizophrenia'.  
@@ -9,16 +8,14 @@ This document shows how the R-functions for producing simulation data, preproces
 Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the functions from the R-scripts.  
 
 ```{r chunk_01}
-source("01_load_pkgs.R")
-source("02_simdata.R")
-source("03_preprocess.R")
-source("04_plot_prev.R")
-source("05_plot_heatmap.R")
-source("06_glmnet.R")
+source("R/01_load_pkgs.R")
+source("R/02_simdata.R")
+source("R/03_preprocess.R")
+source("R/04_plot_prev.R")
+source("R/05_plot_heatmap.R")
+source("R/06_glmnet.R")
 
 ```
-
-\pagebreak  
 
 ## Simulate data
 
@@ -31,7 +28,6 @@ data <- dd_sim(seed = 1000)
 data
 ```
 
-\pagebreak 
 
 ## Plot the proportion of predictors
 
@@ -41,7 +37,6 @@ Use the `dd_plot_prop`-function to the proportion of predictors by case-control 
 dd_plot_prop(data)
 ```
 
-\pagebreak 
 
 ## Plot the log(OR) between main effect variables  
 Note that the three groups of variables (A, B, C) are defined to have a within-group correlation in the simulated data.  
@@ -50,7 +45,6 @@ dd_heatmap(data, limit = c(-4, 4))
 ```
 
 
-\pagebreak 
 
 
 ## Preprocess data
@@ -73,7 +67,6 @@ Display the preprocessed data.
 proc_data$data
 ```
 
-\pagebreak
 
 ## Variable selection and assessment of associations  
 
