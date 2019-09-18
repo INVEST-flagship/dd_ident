@@ -2,9 +2,9 @@
 title: "R-code to reproduce analyses"
 # author: "David Gyllenberg"
 output:
-  html_document: default
   pdf_document:
     toc: yes
+  html_document: default
   word_document: default
     # toc: yes
 ---
