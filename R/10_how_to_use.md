@@ -1,5 +1,6 @@
 ---
-title: "Code for Data-driven identification of risk factors and their interactions"
+title: "R-code to reproduce analyses"
+# author: "David Gyllenberg"
 output:
   html_document: 
     keep_md: true
@@ -20,12 +21,12 @@ Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the 
 
 
 ```r
-source("R/01_load_pkgs.R")
-source("R/02_simdata.R")
-source("R/03_preprocess.R")
-source("R/04_plot_prev.R")
-source("R/05_plot_heatmap.R")
-source("R/06_glmnet.R")
+source("01_load_pkgs.R")
+source("02_simdata.R")
+source("03_preprocess.R")
+source("04_plot_prev.R")
+source("05_plot_heatmap.R")
+source("06_glmnet.R")
 ```
 
 \pagebreak  
@@ -70,7 +71,7 @@ Use the `dd_plot_prop`-function to the proportion of predictors by case-control 
 dd_plot_prop(data)
 ```
 
-![](README_files/figure-html/chunk_03-1.png)<!-- -->
+![](10_how_to_use_files/figure-html/chunk_03-1.png)<!-- -->
 
 \pagebreak 
 
@@ -81,7 +82,7 @@ Note that the three groups of variables (A, B, C) are defined to have a within-g
 dd_heatmap(data, limit = c(-4, 4))
 ```
 
-![](README_files/figure-html/chunk_04-1.png)<!-- -->
+![](10_how_to_use_files/figure-html/chunk_04-1.png)<!-- -->
 
 
 \pagebreak 

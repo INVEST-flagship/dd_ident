@@ -1,6 +1,5 @@
 ---
-title: "R-code to reproduce analyses"
-# author: "David Gyllenberg"
+title: "Code for Data-driven identification of risk factors and their interactions"
 output:
   html_document: 
     keep_md: true
@@ -22,12 +21,12 @@ This document shows how the R-functions for producing simulation data, preproces
 Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the functions from the R-scripts.  
 
 ```{r chunk_01}
-source("01_load_pkgs.R")
-source("02_simdata.R")
-source("03_preprocess.R")
-source("04_plot_prev.R")
-source("05_plot_heatmap.R")
-source("06_glmnet.R")
+source("R/01_load_pkgs.R")
+source("R/02_simdata.R")
+source("R/03_preprocess.R")
+source("R/04_plot_prev.R")
+source("R/05_plot_heatmap.R")
+source("R/06_glmnet.R")
 
 ```
 
