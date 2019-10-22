@@ -1,12 +1,6 @@
 ---
 title: "Code for Data-driven identification of risk factors and their interactions"
-output:
-  html_document: 
-    keep_md: true
-  pdf_document:
-    toc: yes
-  word_document: default
-    # toc: yes
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -30,7 +24,6 @@ source("R/06_glmnet.R")
 
 ```
 
-\pagebreak  
 
 ## Simulate data
 
@@ -43,7 +36,6 @@ data <- dd_sim(seed = 1000)
 data
 ```
 
-\pagebreak 
 
 ## Plot the proportion of predictors
 
@@ -53,16 +45,12 @@ Use the `dd_plot_prop`-function to the proportion of predictors by case-control 
 dd_plot_prop(data)
 ```
 
-\pagebreak 
 
 ## Plot the log(OR) between main effect variables  
 Note that the three groups of variables (A, B, C) are defined to have a within-group correlation in the simulated data.  
 ```{r chunk_04}
 dd_heatmap(data, limit = c(-4, 4))
 ```
-
-
-\pagebreak 
 
 
 ## Preprocess data
@@ -85,7 +73,6 @@ Display the preprocessed data.
 proc_data$data
 ```
 
-\pagebreak
 
 ## Variable selection and assessment of associations  
 
