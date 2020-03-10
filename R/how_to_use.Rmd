@@ -95,6 +95,20 @@ Use the `dd_select`-function to perform variable selection with the elastic net 
 In the simulation data, the main effects `A1`, `B1` and `C1` are defined as active at OR=1.3 and the interaction `A2 x B2` is defined active at OR=3.  
 
 ```{r chunk_09}
+set.seed(111)
 dd_select(proc_data$data)$bonf %>% 
   kable
 ```
+
+For a more exploratory approach, the significance level of the confidence intervals can be incresed. 
+
+```{r chunk_10}
+set.seed(1000)
+dd_select(proc_data$data, sign_level = 0.1)$bonf %>% 
+  kable
+```
+
+## Power analyses
+
+To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09-summarize_sim_res.R`-script.  
+

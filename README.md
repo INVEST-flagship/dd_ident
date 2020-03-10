@@ -45,7 +45,7 @@ data
     ##  8     0     0     0     0     1     1     0     0     0     0
     ##  9     1     0     0     0     0     0     0     1     0     0
     ## 10     0     0     0     0     0     1     0     0     0     0
-    ## # ... with 4,490 more rows
+    ## # â¦ with 4,490 more rows
 
 Plot the proportion of predictors
 ---------------------------------
@@ -102,7 +102,7 @@ proc_data$data
     ##  8     0     0     0     0     1     1     0     0     0     0       0
     ##  9     1     0     0     0     0     0     0     1     0     0       0
     ## 10     0     0     0     0     0     1     0     0     0     0       0
-    ## # ... with 4,490 more rows, and 23 more variables: A1_x_B2 <dbl>,
+    ## # â¦ with 4,490 more rows, and 23 more variables: A1_x_B2 <dbl>,
     ## #   A1_x_B3 <dbl>, A1_x_C1 <dbl>, A1_x_C2 <dbl>, A1_x_C3 <dbl>,
     ## #   A2_x_B1 <dbl>, A2_x_B2 <dbl>, A2_x_B3 <dbl>, A2_x_C1 <dbl>,
     ## #   A2_x_C2 <dbl>, A2_x_C3 <dbl>, A3_x_B1 <dbl>, A3_x_B2 <dbl>,
@@ -118,6 +118,7 @@ Use the `dd_select`-function to perform variable selection with the elastic net 
 In the simulation data, the main effects `A1`, `B1` and `C1` are defined as active at OR=1.3 and the interaction `A2 x B2` is defined active at OR=3.
 
 ``` r
+set.seed(1000)
 dd_select(proc_data$data)$bonf %>% 
   kable
 ```
@@ -129,3 +130,24 @@ dd_select(proc_data$data)$bonf %>%
 | C1        |  1.32|     1.04|      1.69|  0.009|
 | A1\_x\_B1 |  1.42|     0.76|      2.68|  1.000|
 | A2\_x\_B2 |  3.58|     1.87|      7.16|  0.000|
+
+For a more exploratory approach, the significance level of the confidence intervals can be incresed.
+
+``` r
+set.seed(1000)
+dd_select(proc_data$data, sign_level = 0.1)$bonf %>% 
+  kable
+```
+
+| Predictor |    OR|  low\_ci|  high\_ci|      p|
+|:----------|-----:|--------:|---------:|------:|
+| A1        |  1.27|     0.97|      1.65|  0.291|
+| B1        |  1.39|     1.07|      1.80|  0.006|
+| C1        |  1.32|     1.05|      1.66|  0.009|
+| A1\_x\_B1 |  1.42|     0.79|      2.57|  1.000|
+| A2\_x\_B2 |  3.58|     1.95|      6.83|  0.000|
+
+Power analyses
+--------------
+
+To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09-summarize_sim_res.R`-script.
