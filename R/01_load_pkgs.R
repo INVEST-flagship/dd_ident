@@ -12,8 +12,9 @@ p_load(
   furrr, 
   tictoc, 
   openxlsx, 
+  rlang,
   knitr
-       )
+)
 
 # Utils function
 dd_timestamp <- function() Sys.time() %>% str_replace_all(":| |-", "")

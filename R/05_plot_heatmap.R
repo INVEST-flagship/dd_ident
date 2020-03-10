@@ -1,9 +1,8 @@
 
 # source("R//01_load_pkgs.R")
-# 
 # paste0(
 #   "R/", 
-#   list.files("R/", "[2-4]_")) %>% 
+#   list.files("R/", "^0[2-4]_")) %>% 
 #   walk(source)
 
 # Function for heatmap ----------------------------------------------------

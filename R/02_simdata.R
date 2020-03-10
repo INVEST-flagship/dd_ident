@@ -9,7 +9,7 @@ dd_sim <- function (
   prev1 = 0.20, 
   prev2 = 0.15,
   prev3 = .05,             # Prevalence of first three variables in each group 
-                           # of variables
+  # of variables
   correlation = 0.3,       # Correlation in the groups of variables
   OR_main = 1.3,           # OR of main effects
   OR_int = 3.0,            # OR of active interaction
@@ -24,7 +24,7 @@ dd_sim <- function (
   
   # Correlated variables
   x_list <- list()
-
+  
   for(i in 1:p_group) {
     
     x <- 
@@ -36,7 +36,7 @@ dd_sim <- function (
                       increase_pred, 
                       min(c(prev1, prev2, prev3)), 
                       max(c(prev1, prev2, prev3)))
-                    ), 
+        ), 
         dist = "binary",
         rho = correlation,
         corstr = "cs",
@@ -71,7 +71,7 @@ dd_sim <- function (
   }
   
   b <- Reduce("+", b_list)
-     
+  
   # Add intercept and interaction effect
   b <- intercept + b + log(OR_int)*x[,  "A2"]*x[,  "B2"]
   
@@ -82,7 +82,7 @@ dd_sim <- function (
   
   # Return data
   
-  data = cbind(y, x) %>% as.tibble()
+  data = cbind(y, x) %>% as_tibble()
   
   return(data)
   

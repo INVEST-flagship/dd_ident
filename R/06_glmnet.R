@@ -3,7 +3,7 @@
 # 
 # paste0(
 #   "R/", 
-#   list.files("R/", "[2-5]_")) %>% 
+#   list.files("R/", "^0[2-5]_")) %>% 
 #   walk(source)
 
 # Function for LASSO and post-selective inference -------------------------
@@ -11,9 +11,11 @@
 dd_select <- function(
   dt = data,         # Preprocessed data 
   a_pen = 0.75,      # Alpha in elasticnet (elasticnet mixing parameter)
-  min_rule = FALSE,  # Minimum rule to assess lambda
+  sign_level = 0.05, # Significance level for confidence intervals
+  min_rule = FALSE,  # If TRUE, minimum-rule to assess lambda. 
+  # If FALSE (default), 1-SE-rule to assess lambda
   loss = "auc"       # Loss to use for cross-validation: "auc" or "deviance"
-  ) {
+) {
   
   # Using preprocessed data
   proc_data <- dt 
@@ -91,7 +93,7 @@ dd_select <- function(
     
     return(out)
   }
-    
+  
   # Bonferroni corrected logistic regression
   boncorr_model = glm(y ~ ., data = as.data.frame(proc_data[, active]), 
                       family = "binomial") 
@@ -99,12 +101,12 @@ dd_select <- function(
   boncorr_model_confint <- 
     suppressMessages(
       (boncorr_model %>% 
-       confint(
-         level = (
-           1 - (0.05 / (ncol(proc_data) - 1))
-                  )
+         confint(
+           level = (
+             1 - (sign_level / (ncol(proc_data) - 1))
+           )
          )
-       )
+      )
     ) 
   
   boncorr_table <- 
@@ -114,9 +116,9 @@ dd_select <- function(
     mutate(
       OR = boncorr_model$coefficients[-1] %>% exp %>% round(2),
       low_ci = 
-          boncorr_model_confint[-1, 1] %>% exp %>% round(2), 
+        boncorr_model_confint[-1, 1] %>% exp %>% round(2), 
       high_ci = 
-          boncorr_model_confint[-1, 2] %>% exp %>% round(2), 
+        boncorr_model_confint[-1, 2] %>% exp %>% round(2), 
       p = 
         (boncorr_model %>% 
            summary %>% 
@@ -152,23 +154,43 @@ dd_select <- function(
   
 }
 
+# Test alpha = 0.05
+# set.seed(111)
 # dd_select(
-#   dd_preprocess(dd_sim(seed = NULL, n = 4500))$data,
+#   dd_preprocess(dd_sim(seed = 111, n = 4500))$data,
 #   a_pen = 0.75,
-#   loss = "deviance",
-#   min_rule = T
+#   sign_level = 0.05,
+#   loss = "auc",
+#   min_rule = F
 #   )
+
+# Test more exploratory alpha = 0.10
+# set.seed(111)
+# dd_select(
+#   dd_preprocess(dd_sim(seed = 111, n = 4500))$data,
+#   a_pen = 0.75,
+#   sign_level = 0.1,
+#   loss = "auc",
+#   min_rule = F
+# )
+
 
 # Extract true and false positives in simulation data ---------------------
 
 # Function for data including an active interaction
 dd_select_act_int <- 
-  function(dt = data, a_pen = 0.75, min_rule = FALSE, loss = "auc") {
+  function(
+    dt = data, 
+    a_pen = 0.75, 
+    sign_level = 0.05,
+    min_rule = FALSE, 
+    loss = "auc") {
     
     out <- dd_select(dt = dt, 
-                      a_pen = a_pen, 
-                      min_rule = min_rule,
-                      loss = loss)
+                     a_pen = a_pen, 
+                     sign_level = sign_level,
+                     min_rule = min_rule,
+                     loss = loss)
     
     tab <- 
       out$bonf %>% 
@@ -181,7 +203,7 @@ dd_select_act_int <-
           str_detect(Predictor, "A2_x_B2") ~ 1, 
           TRUE ~ 0
         ), 
-        sign_p = if_else(p < 0.05, 1, 0)
+        sign_p = if_else(p < sign_level, 1, 0)
       ) %>% 
       count(type, active, sign_p) %>% 
       transmute(
@@ -211,8 +233,8 @@ dd_select_act_int <-
             cell == "FP_int" | cell == "TN_int" ~  n/(out$n_int-1)
           )
       )
-        
-      return(tab)
+    
+    return(tab)
     
   }
 
@@ -232,68 +254,42 @@ dd_select_act_int <-
 #   a_pen = 0.75, loss = "auc", min_rule = F
 # )
 
-# Function for data without any active interactions
-dd_select_nonact_int <- 
-  function(
-    dt = data, a_pen = 0.75, min_rule = FALSE, loss = "auc"
-  ) {
-  
-  out <- dd_select(dt = dt, 
-                    a_pen = a_pen, 
-                    min_rule = min_rule,
-                    loss = loss)
-  
-  tab <- 
-    out$bonf %>% 
-    mutate(
-      type = case_when(
-        str_detect(Predictor, "_x_") ~ "int", 
-        TRUE ~ "main"),
-      active = case_when(
-        type == "main" & str_detect(Predictor, "1") ~ 1,
-        TRUE ~ 0
-      ),
-      sign_p = if_else(p < 0.05, 1, 0)
-    ) %>%
-    count(type, active, sign_p) %>%
-    transmute(
-      cell =
-        case_when(
-          type == "main" & active == 0 & sign_p == 0 ~ "TN_main",
-          type == "main" & active == 1 & sign_p == 0 ~ "FN_main",
-          type == "main" & active == 0 & sign_p == 1 ~ "FP_main",
-          type == "main" & active == 1 & sign_p == 1 ~ "TP_main",
-          type == "int" & active == 0 & sign_p == 0 ~ "TN_int",
-          type == "int" & active == 0 & sign_p == 1 ~ "FP_int"
-        ),
-      n,
-      prob_among_selected =
-        case_when(
-          cell == "TP_main" | cell == "FN_main" ~ 
-            n/ (
-              dt %>% select(contains("1")) %>% ncol()
-            ), 
-          cell == "FP_main" | cell == "TN_main" ~ 
-            n/ (
-              dt %>% select(-contains("1"), -contains("y")) %>% ncol()
-            ),
-          cell == "FP_int" | cell == "TN_int" ~  n/(out$n_int)
-        )
-    )
-  
-  return(tab)
-}
-
-# Test
-# dd_select_nonact_int(
-#   dd_preprocess(
+# Test with specified seeds and alpha 5% and 10%
+# set.seed(111)
+# dd_select_act_int(
+#   dt = dd_preprocess(
 #     dd_sim(
 #       n=4500,
+#       seed = 111, 
 #       correlation = 0.3,
 #       OR_main = 1.3,
-#       OR_int = 1,
-#       intercept = -0.85,
-#       increase_pred = 0)
-#   )$data
+#       OR_int = 3,
+#       intercept = -0.88,
+#       increase_pred = 0),
+#     exclude_n = 5,
+#     log_odd_limit = 0.3
+#   )$data,
+#   a_pen = 0.75, 
+#   sign_level = 0.05, # alpha = 0.05
+#   loss = "auc", 
+#   min_rule = F
 # )
-
+# set.seed(111)
+# dd_select_act_int(
+#   dt = dd_preprocess(
+#     dd_sim(
+#       n=4500,
+#       seed = 111, 
+#       correlation = 0.3,
+#       OR_main = 1.3,
+#       OR_int = 3,
+#       intercept = -0.88,
+#       increase_pred = 0),
+#     exclude_n = 5,
+#     log_odd_limit = 0.3
+#   )$data,
+#   a_pen = 0.75, 
+#   sign_level = 0.1, # alpha = 0.10
+#   loss = "auc", 
+#   min_rule = F
+# )

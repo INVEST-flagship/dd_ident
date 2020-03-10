@@ -1,9 +1,8 @@
 
 # source("R//01_load_pkgs.R")
-# 
 # paste0(
 #   "R/", 
-#   list.files("R/", "[2-3]_")) %>% 
+#   list.files("R/", "^0[2-3]_")) %>% 
 #   walk(source)
 
 # Function for plotting the prevalence of predictors ----------------------
@@ -39,8 +38,8 @@ dd_plot_prop <- function(dt = data) {
     as.character()
   
   plot <- ggplot(prop, aes(x = Predictor, 
-                   y = Percentage, 
-                   fill = Status)) +
+                           y = Percentage, 
+                           fill = Status)) +
     geom_bar(stat = "identity", position = position_dodge()) + 
     coord_flip() +
     scale_x_discrete(limits = positions, name = "Predictor") +

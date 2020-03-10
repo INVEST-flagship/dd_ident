@@ -1,9 +1,8 @@
 
 # source("R//01_load_pkgs.R")
-# 
 # paste0(
-#   "R/", 
-#   list.files("R/", "2_")) %>% 
+#   "R/",
+#   list.files("R/", "^02_")) %>%
 #   walk(source)
 
 # Funtion for preprocessing data ------------------------------------------
@@ -11,7 +10,7 @@
 dd_preprocess <- function (
   
   dt = data,           # Complete-case data with binary (0, 1) response y
-                       # and binary main effects (0, 1) 
+  # and binary main effects (0, 1) 
   exclude_n = 5,       # Exclude if < expected count
   log_odd_limit = 0.3, # Absolute log odds ratio limit
   test_ctrls = FALSE)  # Test log odds ratio crterion in controls or total data
@@ -21,14 +20,14 @@ dd_preprocess <- function (
   # All 2-way interactions
   x = model.matrix(~ .^2-1, data = dt %>% select(-y)) # -1 to exclude intercept
   x <- as.matrix(x)
-
+  
   # Rename interactions
   colnames(x) <- colnames(x) %>%
     str_replace(":", "_x_")
   
   dt <- 
     cbind(dt %>% select(y), x) %>% 
-    as.tibble(rownames = NULL)
+    as_tibble(rownames = NULL)
   
   # Exlcude predictors with low expected counts
   
@@ -75,13 +74,13 @@ dd_preprocess <- function (
     )
     
   }
-
+  
   # Add prevalence
   exp_count[, 5] <- 
     exp_count[, 3] / nrow(dt[dt$y == 0, ]) * 100
   exp_count[, 6] <- 
     exp_count[, 4] / nrow(dt[dt$y == 1, ]) * 100
-    
+  
   # Make dataframe showing expected counts
   
   colnames(exp_count) <- 
@@ -91,7 +90,7 @@ dd_preprocess <- function (
   
   exp_count <- 
     exp_count %>% 
-    as.tibble() %>% 
+    as_tibble() %>% 
     mutate(
       predictor = colnames(dt[, -1]), 
       include = 
@@ -186,7 +185,7 @@ dd_preprocess <- function (
   
   cor_table <- 
     cor_table %>% 
-    as.tibble() %>% 
+    as_tibble() %>% 
     mutate(
       include = log_odds_ratio < abs(log_odd_limit)
     )
@@ -210,9 +209,9 @@ dd_preprocess <- function (
   
   res <- list()
   
-  res$data <- dt %>% as.tibble()
-  res$exp_count <- exp_count %>% as.tibble()
-  res$cor_table <- cor_table %>% as.tibble()
+  res$data <- dt %>% as_tibble()
+  res$exp_count <- exp_count %>% as_tibble()
+  res$cor_table <- cor_table %>% as_tibble()
   
   return(res)
 }
