@@ -15,11 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
-This document shows how the R-functions for producing simulation data, preprocessing data, vizualizing data and performing the analyses are utilized as described in the manuscript 'Data-Driven Identification of Risk Factors and Their Interactions - A Simulation and a Study of Parental and Demographic Risk Factors for Schizophrenia'.  
+This document shows how the R-functions for producing simulation data, preprocessing data, vizualizing data and performing the analyses are utilized as described in the manuscript 'Robust Data-Driven Identification of Risk Factors and Their Interactions - A Simulation and a Study of Parental and Demographic Risk Factors for Schizophrenia'.  
 
 ## Load functions
 
-Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the functions from the R-scripts.  
+Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the functions from the R-scripts.    
 
 ```{r chunk_01}
 source("01_load_pkgs.R")
@@ -95,12 +95,12 @@ Use the `dd_select`-function to perform variable selection with the elastic net 
 In the simulation data, the main effects `A1`, `B1` and `C1` are defined as active at OR=1.3 and the interaction `A2 x B2` is defined active at OR=3.  
 
 ```{r chunk_09}
-set.seed(111)
+set.seed(1000)
 dd_select(proc_data$data)$bonf %>% 
   kable
 ```
 
-For a more exploratory approach, the significance level of the confidence intervals can be incresed. 
+For a more exploratory approach, the significance level of the confidence intervals can be increased. 
 
 ```{r chunk_10}
 set.seed(1000)
@@ -110,5 +110,4 @@ dd_select(proc_data$data, sign_level = 0.1)$bonf %>%
 
 ## Power analyses
 
-To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09-summarize_sim_res.R`-script.  
-
+To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09_summarize_sim_res.R`-script.  
