@@ -131,7 +131,7 @@ dd_select(proc_data$data)$bonf %>%
 | A1\_x\_B1 |  1.42|     0.76|      2.68|  1.000|
 | A2\_x\_B2 |  3.58|     1.87|      7.16|  0.000|
 
-For a more exploratory approach, the significance level of the confidence intervals can be incresed.
+For a more exploratory approach, the significance level of the confidence intervals can be increased.
 
 ``` r
 set.seed(1000)
@@ -150,4 +150,4 @@ dd_select(proc_data$data, sign_level = 0.1)$bonf %>%
 Power analyses
 --------------
 
-To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09-summarize_sim_res.R`-script.
+To conduct power analyses, modify and run the `08_power_repeat_sim.R`-script and summarize the results as described in the `09_summarize_sim_res.R`-script.
