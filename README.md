@@ -12,7 +12,7 @@ a Study of Parental and Demographic Risk Factors for Schizophrenia’.
 
 ## Load functions
 
-Clone the repository from <https://github.com/davgyl/dd_ident.git> and
+Clone the repository and
 load the functions from the R-scripts.
 
 ``` r
