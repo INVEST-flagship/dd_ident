@@ -12,7 +12,7 @@ This document shows how the R-functions for producing simulation data, preproces
 
 ## Load functions
 
-Clone the repository from <https://github.com/davgyl/dd_ident.git> and load the functions from the R-scripts.  
+Clone the repository and load the functions from the R-scripts.  
 
 ```{r chunk_01}
 source("R/01_load_pkgs.R")
