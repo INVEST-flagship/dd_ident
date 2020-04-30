@@ -12,6 +12,7 @@ p_load(
   furrr, 
   tictoc, 
   openxlsx, 
+  reshape2,
   rlang,
   knitr
 )
