@@ -2,6 +2,8 @@ Code for Robust data-driven identification of risk factors and their
 interactions
 ================
 
+[![DOI](https://zenodo.org/badge/260191514.svg)](https://zenodo.org/badge/latestdoi/260191514)
+
 ## Introduction
 
 This document shows how the R-functions for producing simulation data,
