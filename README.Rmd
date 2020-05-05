@@ -7,6 +7,8 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+[![DOI](https://zenodo.org/badge/260191514.svg)](https://zenodo.org/badge/latestdoi/260191514)
+
 ## Introduction
 This document shows how the R-functions for producing simulation data, preprocessing data, vizualizing data and performing the analyses are utilized as described in the manuscript 'Robust Data-Driven Identification of Risk Factors and Their Interactions - A Simulation and a Study of Parental and Demographic Risk Factors for Schizophrenia'.  
 

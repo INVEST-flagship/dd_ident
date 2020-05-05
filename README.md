@@ -14,8 +14,7 @@ a Study of Parental and Demographic Risk Factors for Schizophrenia’.
 
 ## Load functions
 
-Clone the repository and
-load the functions from the R-scripts.
+Clone the repository and load the functions from the R-scripts.
 
 ``` r
 source("R/01_load_pkgs.R")
